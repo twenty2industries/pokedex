@@ -13,7 +13,7 @@ return `<div id="display-${index}" class="displays">
           <div id="pokemon-picture-area-${index}" class="pokemonPictureArea">
           <img class="pokemonImage"src="${pokePngs}">
           </div>
-          <div id="element0-info-area-${index}" class="elementInfoArea">${pokeTypesZero} ${pokeTypesOne}</div>
+          <div id="element0-info-area-${index}" class="elementInfoArea"><img src="${pokeTypesZero}"></div>
         </div>`; 
 }
 
