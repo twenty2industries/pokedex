@@ -7,8 +7,8 @@ function returnHeader() {
 function returnDisplays(index) {
 return `<div id="display-${index}" class="displays">
           <div id="pokemon-name-area-${index}" class="pokemonNameArea">
-            <div id="pokemon-number-${index}" class="pokemonNumber">#NUMMER</div>
-            <div id="pokemon-name-${index}" class="pokemonName">${pokeData}</div>
+            <div id="pokemon-number-${index}" class="pokemonNumber"># ${pokeDetails.id}</div>
+            <div id="pokemon-name-${index}" class="pokemonName">${pokeNames.toUpperCase()}</div>
           </div>
           <div id="pokemon-picture-area-${index}" class="pokemonPictureArea">
             Picture
