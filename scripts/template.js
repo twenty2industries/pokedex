@@ -11,9 +11,9 @@ return `<div id="display-${index}" class="displays">
             <div id="pokemon-name-${index}" class="pokemonName">${pokeNames.toUpperCase()}</div>
           </div>
           <div id="pokemon-picture-area-${index}" class="pokemonPictureArea">
-            Picture
+          <img class="pokemonImage"src="${pokePngs}">
           </div>
-          <div id="element-info-area-${index}" class="elementInfoArea">ELEMENT INFO</div>
+          <div id="element0-info-area-${index}" class="elementInfoArea">${pokeTypesZero} ${pokeTypesOne}</div>
         </div>`; 
 }
 

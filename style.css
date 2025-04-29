@@ -57,7 +57,8 @@ header {
     background-color: #787a75;
     width: 50rem;
     height: 65rem;
-    
+    cursor: pointer;
+
     .pokemonNameArea{
       width: 100%;
       background-color: rgb(76, 0, 168);
@@ -69,10 +70,20 @@ header {
       padding: 0rem 3rem;
     }
   }
+  .displays:hover{
+    border: rgb(255, 255, 255) 20px solid;
+  }
   .pokemonPictureArea{
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 2rem 3rem;
     background-color: blue;
     height: 40rem;
+
+    .pokemonImage{
+      height: 43rem;
+    }
   }
   
   .elementInfoArea{
