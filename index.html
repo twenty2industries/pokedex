@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-  <title>Pokedex</title>
-</head>
-<body>
-  <header class="content">
-    <img src="assets/logo/logo1.png" class="logo">
-    <input class="input" type="text" placeholder="search ">
-  </header>
-  <div id="content-area" class="contentArea"></div>
-  <footer><img class="logoFooter" src="assets/logo/logoFooter.png"></footer>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Pokedex</title>
+  </head>
+  <body onload="init()">
+    <header id="header-area" class="content"></header>
+
+    <div id="content-area" class="contentArea">
+      <div id="display-area" class="displayArea"></div>
+    </div>
+
+    <footer id="footer-area"></footer>
+  </body>
+  <script src="scripts/template.js"></script>
+  <script src="script.js"></script>
 </html>

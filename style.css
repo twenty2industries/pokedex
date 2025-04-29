@@ -29,7 +29,6 @@ header {
     text-align: center;
   }
 
-
   .logo {
     height: 11rem;
   }
@@ -37,11 +36,50 @@ header {
 
 .contentArea {
   background-image: url("assets/background/backgroundImage.jpeg");
-  background-color: #FED640;
+  background-color: #787a75;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
-  height: 100vh;
+  padding: 3rem 10rem;
+
+  .displayArea{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 6rem;
+    width: 100%;
+  }
+
+  .displays{
+    font-size: 2.4rem;
+    color: white;
+    background-color: #787a75;
+    width: 50rem;
+    height: 65rem;
+    
+    .pokemonNameArea{
+      width: 100%;
+      background-color: rgb(76, 0, 168);
+      height: 10rem;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0rem 3rem;
+    }
+  }
+  .pokemonPictureArea{
+    padding: 2rem 3rem;
+    background-color: blue;
+    height: 40rem;
+  }
+  
+  .elementInfoArea{
+    height: 15rem;
+    padding: 2rem 3rem;
+    background-color: rgb(142, 0, 92);
+  }
 }
 
 footer {
@@ -59,7 +97,7 @@ footer {
   line-height: 10rem;
   font-size: 1.6rem;
 
-  .logoFooter{
+  .logoFooter {
     height: 9rem;
   }
 }
