@@ -42,7 +42,7 @@ header {
   background-repeat: no-repeat;
   padding: 3rem 10rem;
 
-  .displayArea{
+  .displayArea {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -51,7 +51,7 @@ header {
     width: 100%;
   }
 
-  .displays{
+  .displays {
     font-size: 2.4rem;
     color: white;
     background-color: #787a75;
@@ -59,7 +59,7 @@ header {
     height: 65rem;
     cursor: pointer;
 
-    .pokemonNameArea{
+    .pokemonNameArea {
       width: 100%;
       background-color: rgb(76, 0, 168);
       height: 10rem;
@@ -69,11 +69,23 @@ header {
       justify-content: space-between;
       padding: 0rem 3rem;
     }
+
+    .elementInfoArea {
+      display: flex;
+      gap: 5rem;
+
+      .pokeTypeInfo {
+        height: 5rem;
+      }
+    }
+
   }
-  .displays:hover{
-    border: rgb(255, 255, 255) 20px solid;
+
+  .displays:hover {
+    border: rgb(255, 255, 255) 1px solid;
   }
-  .pokemonPictureArea{
+
+  .pokemonPictureArea {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -81,12 +93,12 @@ header {
     background-color: blue;
     height: 40rem;
 
-    .pokemonImage{
+    .pokemonImage {
       height: 43rem;
     }
   }
-  
-  .elementInfoArea{
+
+  .elementInfoArea {
     height: 15rem;
     padding: 2rem 3rem;
     background-color: rgb(142, 0, 92);
