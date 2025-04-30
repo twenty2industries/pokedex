@@ -12,6 +12,7 @@ html {
 }
 
 body {
+  background-color: #aa9341;
   flex-direction: column;
 }
 
@@ -49,8 +50,8 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #aa9341;
   padding: 3rem 10rem;
+
 
   .displayArea {
     max-width: 1920px;
@@ -130,7 +131,41 @@ header {
     background-position: right;
     background-size: contain;
     background-repeat: no-repeat;
-    
+  }
+
+  .loadMoreGif{
+    width: 20rem;
+  }
+}
+
+.bigOverlay{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #303a205a;
+  z-index: 20;
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  .buttonDiv{
+    width: 100%;
+    margin-top: 12rem;
+    display: flex;
+    justify-content: end;
+    margin-right: 10rem;
+  }
+  .displayBigArea{
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    width: 90rem;
+    height: 90rem;
   }
 }
 

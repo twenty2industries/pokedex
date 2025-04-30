@@ -9,15 +9,18 @@
   </head>
   <body onload="init()">
     <header id="header-area"></header>
-
     <div id="loading-spinner-area">
     </div>
-    <div id="content-area" class="contentArea l">
+    <div id="content-area" class="contentArea">
+      <div id="big-overlay">
+      </div>
       <div id="display-area" class="displayArea"></div>
       <button id="load-more-button" class="loadMoreButton" onclick="triggerMorePokemons()">load more</button>
+      <div class="loadMoreIcon" id="load-more-icon"></div>
     </div>
     <footer id="footer-area"></footer>
   </body>
   <script src="scripts/template.js"></script>
   <script src="script.js"></script>
 </html>
+
