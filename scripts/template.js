@@ -12,7 +12,7 @@ function returnDisplays(index, details, name, image, typeZero, typeOneImg) {
             <div id="pokemon-number-${index}" class="pokemonNumber"># ${details.id}</div>
             <div id="pokemon-name-${index}" class="pokemonName">${name.toUpperCase()}</div>
           </div>
-          <div id="pokemon-picture-area-${index}" class="pokemonPictureArea">
+          <div id="pokemon-picture-area-${index}" class="pokemonPictureArea ${details.types[0].type.name}" >
           <img class="pokemonImage" src="${image}">
           </div>
           <div id="element-info-area-${index}" class="elementInfoArea">

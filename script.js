@@ -37,13 +37,10 @@ async function loadAllPokemons() {
 
   for (let i = 0; i < data.results.length; i++) {
     const pokeName = data.results[i].name;
-
     const pokeDetails = await fetchPokeDetails(i);
     const pokePng = pokeDetails.sprites.front_default;
-
     const pokeTypesZero = await showPokeTypeZero(pokeDetails);
     const pokeTypesOnePng = await showPokeTypeOne(pokeDetails);
-
     const contentRef = document.getElementById("display-area");
     contentRef.innerHTML += returnDisplays(i, pokeDetails, pokeName, pokePng, pokeTypesZero, pokeTypesOnePng);
   }
@@ -61,6 +58,8 @@ async function showPokeTypeOne(details) {
 
 async function showPokeTypeZero(details) {
   let pokeTypeZeroUrl = details.types[0].type.url;
+  console.log(details.types[0].type.name);
+  
   let pokeTypeZeroUrlData = await fetch(pokeTypeZeroUrl);
   let pokeTypeZeroPng = await pokeTypeZeroUrlData.json();
   return pokeTypeZeroPng.sprites["generation-iii"]["xd"].name_icon;

@@ -103,7 +103,6 @@ header {
     align-items: center;
     justify-content: center;
     padding: 2rem 3rem;
-    background-color: blue;
     height: 40rem;
 
     .pokemonImage {
