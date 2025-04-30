@@ -27,7 +27,6 @@ function removeSpinner() {
   spinnerAreaRef.innerHTML = "";
 }
 
-
 async function fetchPokeList() {
   let response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=20&offset=0");
   const data = await response.json();
@@ -90,6 +89,15 @@ async function fetchPokeSecondDetails(secondResultDataIndex) {
   return pokeDetails;
 }
 
+async function triggerMorePokemons() {
+  try {
+    removeMoreButton();
+    const delay = new Promise((resolve) => setTimeout(resolve, 3000));
+    await delay; // now waiting 1 second - neccessary for the spinner!!!
+    await loadMorePokemons(); // after spinner is done - content loaded
+  } catch (error) {}
+}
+
 async function loadMorePokemons() {
   if (loadButton == true) {
     const data = await fetchPokeSecondList();
@@ -110,8 +118,6 @@ async function showMorePokeTypeZero(details) {
   let pokeTypeZeroUrl = details.types[0].type.url;
   let pokeTypeZeroUrlData = await fetch(pokeTypeZeroUrl);
   let pokeTypeZeroPng = await pokeTypeZeroUrlData.json();
-  console.log(details.types[0].type);
-  
   return pokeTypeZeroPng.sprites["generation-vii"]["sun-moon"].name_icon;
 }
 
@@ -124,3 +130,9 @@ async function showMorePokeTypeOne(details) {
     : ""; // : '' solved an error :undefined occures to be an error in the dom
   return typeIcon;
 }
+
+function removeMoreButton() {
+  const buttonRef = document.getElementById('load-more-button');
+  buttonRef.classList.add('d_none');
+}
+
