@@ -129,10 +129,10 @@ async function showMorePokeTypeZero(details) {
 async function showMorePokeTypeOne(details) {
   const typeInfo = details.types[1]
     ? await (await fetch(details.types[1].type.url)).json()
-    : undefined; // if got value then define else empty string, variable now ready to fetch get
+    : undefined; 
   const typeIcon = typeInfo
     ? typeInfo.sprites["generation-vii"]?.["sun-moon"]?.name_icon
-    : ""; // : '' solved an error :undefined occures to be an error in the dom
+    : ""; 
   return typeIcon;
 }
 
@@ -167,7 +167,7 @@ async function fetchBigOverlayPokeDetails (resultDataIndex) {
 }
 
 async function loadAllBigOverlayPokemons(index) {
-  const data = await fetchBigOverlayPokeDetails(index); // Hier bekommst du bereits die Details eines Pokémon
+  const data = await fetchBigOverlayPokeDetails(index); 
 
   const pokeName = data.name;
   const pokeDetails = data;
