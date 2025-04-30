@@ -13,7 +13,7 @@ let loadButton = true;
 async function renderPokeCards() {
   try {
       loadingSpinner()
-      const delay = new Promise(resolve => setTimeout(resolve, 500));
+      const delay = new Promise(resolve => setTimeout(resolve, 3000));
       await delay; // now waiting 1 second - neccessary for the spinner!!!
       removeSpinner()
       await loadAllPokemons(); // after spinner is done - content loaded 
@@ -21,6 +21,12 @@ async function renderPokeCards() {
       console.error("error:", error);
   }     
 }
+
+function removeSpinner() {
+  const spinnerAreaRef = document.getElementById('loading-spinner-area');
+  spinnerAreaRef.innerHTML = "";
+}
+
 
 async function fetchPokeList() {
   let response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=20&offset=0");
@@ -67,20 +73,6 @@ async function showPokeTypeZero(details) {
   return pokeTypeZeroPng.sprites["generation-vii"]["sun-moon"].name_icon;
 }
 
-function loadingSpinner() {
-  const spinnerAreaRef = document.getElementById('loading-spinner-area');
-  spinnerAreaRef.innerHTML += `      <div class="loadingSpinner">
-        <img
-          src="assets/loadingSpinner/loadingSpinner.gif"
-          class="loadingSpinnerGif"
-        />
-      </div>`;
-}
-
-function removeSpinner() {
-  const spinnerAreaRef = document.getElementById('loading-spinner-area');
-  spinnerAreaRef.innerHTML = "";
-}
 
 async function fetchPokeSecondList() {
   let response = await fetch(

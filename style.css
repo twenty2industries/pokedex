@@ -4,6 +4,7 @@
   box-sizing: border-box;
   position: relative;
   font-family: "Raleway", sans-serif;
+  scroll-behavior: smooth;
 }
 
 html {
@@ -48,11 +49,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url("assets/background/backgroundImage.jpeg");
-  background-color: #787a75;
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
+  background-color: #aa9341;
   padding: 3rem 10rem;
 
   .displayArea {
@@ -68,27 +65,30 @@ header {
   .displays {
     font-size: 2.4rem;
     color: white;
-    background-color: #787a75;
     width: 50rem;
     height: 65rem;
     cursor: pointer;
 
     .pokemonNameArea {
       width: 100%;
-      background-color: rgb(76, 0, 168);
+      background-color: rgb(90, 90, 90);
       height: 10rem;
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
+      border-top-left-radius: 7rem;
       padding: 0rem 3rem;
     }
 
     .elementInfoArea {
+      height: 15rem;
+      padding: 2rem 3rem;
+      background-color: rgb(90, 90, 90);
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 5rem;
+      border-bottom-right-radius: 7rem;
 
       .pokeTypeInfo {
         height: 5rem;
@@ -98,7 +98,9 @@ header {
   }
 
   .displays:hover {
-    border: rgb(255, 255, 255) 1px solid;
+    border-bottom-right-radius: 7rem;
+    border-top-left-radius: 7rem;
+    border: rgba(0, 0, 0, 0.144) 7px solid;
   }
 
   .pokemonPictureArea {
@@ -113,13 +115,10 @@ header {
     }
   }
 
-  .elementInfoArea {
-    height: 15rem;
-    padding: 2rem 3rem;
-    background-color: rgb(142, 0, 92);
-  }
-
   .loadMoreButton{
+    font-size: 2rem;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
     margin-top: 5rem;
     background-color: rgba(187, 187, 187, 0.347);
     width: 20rem;
@@ -127,7 +126,11 @@ header {
     cursor: pointer;
   } 
   .loadMoreButton:hover{
-    background-color: aqua;
+    background: url("assets/background/loadMore.gif");
+    background-position: right;
+    background-size: contain;
+    background-repeat: no-repeat;
+    
   }
 }
 
@@ -160,4 +163,8 @@ footer {
   .logoFooter {
     height: 9rem;
   }
+}
+
+.d_none{
+  display: none;
 }

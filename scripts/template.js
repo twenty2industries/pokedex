@@ -1,3 +1,13 @@
+function loadingSpinner() {
+  const spinnerAreaRef = document.getElementById('loading-spinner-area');
+  spinnerAreaRef.innerHTML += `      <div class="loadingSpinner">
+        <img
+          src="assets/loadingSpinner/loadingSpinner.gif"
+          class="loadingSpinnerGif"
+        />
+      </div>`;
+}
+
 function returnHeader() {
   const headerRef = document.getElementById("header-area");
   headerRef.innerHTML += `       <div class="headerArea">
@@ -48,5 +58,6 @@ function returnMoreDisplays(index, name, details, image, typeZero, typeOneImg) {
 
 function returnFooter() {
   const footerRef = document.getElementById("footer-area");
-  footerRef.innerHTML += `<img class="logoFooter" src="assets/logo/logoFooter.png"/>`;
+  footerRef.innerHTML += `<img class="logoFooter" src="assets/logo/logoFooter.png"/>
+`;
 }

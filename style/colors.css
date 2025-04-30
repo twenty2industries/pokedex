@@ -1,13 +1,13 @@
 .grass{
-  background-color: green;
+  background-color: rgb(17, 103, 17);
 }
 
 .fire{
-  background-color: rgba(171, 0, 0, 0.792);
+  background-color: rgba(164, 16, 16, 0.792);
 }
 
 .water{
-  background-color: rgba(0, 255, 255, 0.619);
+  background-color: rgba(28, 111, 195, 0.621);
 }
 
 .bug{
@@ -15,19 +15,19 @@
 }
 
 .normal {
-  background-color: #ada57b;
+  background-color: #9c9573;
 }
 
 .poison{
-  background-color: #a5429c;
+  background-color: #82357b;
 }
 
 .electric{
-  background-color: #e2d73b;
+  background-color: #c5bc43;
 }
 
 .fairy {
-  background-color: #ffadf8;
+  background-color: #d891d2;
 }
 
 .ground{
