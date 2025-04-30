@@ -17,11 +17,20 @@ body {
 header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  background-color: #787a75;
+  justify-content: center;
   width: 100%;
-  height: 14rem;
-  padding: 0rem 10rem;
+  background-color: #787a75;
+
+  .headerArea{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #787a75;
+    width: 100%;
+    max-width: 1920px;
+    height: 14rem;
+    padding: 0rem 10rem;
+  }
 
   .input {
     height: 4rem;
@@ -35,6 +44,9 @@ header {
 }
 
 .contentArea {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-image: url("assets/background/backgroundImage.jpeg");
   background-color: #787a75;
   background-position: center;
@@ -43,6 +55,7 @@ header {
   padding: 3rem 10rem;
 
   .displayArea {
+    max-width: 1920px;
     display: flex;
     align-items: center;
     justify-content: center;

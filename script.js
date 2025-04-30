@@ -1,50 +1,68 @@
 function init() {
   renderContent();
-  loadAllPokemons();
+  renderPokeCards();
 }
 function renderContent() {
   returnHeader();
-  returnDisplays();
   returnFooter();
 }
 
-let pokeNames = "";
-let pokeNumber = "";
-let pokeDetails = "";
-let pokePngs = "";
-let pokeTypesZero = "";
-let pokeTypesOne = "";
-let pokeTypesOnePng = "";
-let pokeTypeZeroPng = "";
-let data = "";
-
-async function loadAllPokemons() {
-  let response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=20&offset=0");
-  data = await response.json();
-  for (let i = 0; i < data.results.length; i++) {
-    pokeNames = data.results[i].name; //
-    let pokeUrl = data.results[i].url; //url used with counter to count through all urls.
-    let pokeData = await fetch(pokeUrl); // get the data from the URL
-    pokeDetails = await pokeData.json(); // parse the fetched Pokémon data
-    pokePngs =  pokeDetails.sprites.front_default; // pokemon pictures
-
-    pokeTypesOne = pokeDetails.types[1]
-    ? await (await fetch(pokeDetails.types[1].type.url)).json()
-    : undefined;// if got value then define else empty string, variable now ready to fetch get
-    pokeTypesOnePng = pokeTypesOne ? pokeTypesOne.sprites['generation-iii']?.['xd']?.name_icon : ''; // : '' solved an error :undefined occures to be an error in the dom
-
-    //fetch url for type pngs 
-
-    let pokeTypeZeroUrl = pokeDetails.types[0].type.url; // url type pngs 
-    let pokeTypeZeroUrlData = await fetch(pokeTypeZeroUrl); // get data from url
-    pokeTypeZeroPng = await pokeTypeZeroUrlData.json(); // define data in variable pokeTypeZero
-    pokeTypesZero = pokeTypeZeroPng.sprites['generation-iii']['xd'].name_icon; //type name zero
-
-
-    const contentRef = document.getElementById("display-area");
-    contentRef.innerHTML += returnDisplays(i);
+async function renderPokeCards() {
+  try {
+      const delay = new Promise(resolve => setTimeout(resolve, 1000));
+      await delay; // now waiting 1 second - neccessary for the spinner!!!
+      await loadAllPokemons(); // after spinner is done - content loaded 
+  } catch (error) {
+      console.error("error:", error);
   }
 }
 
-//key = sprites for pngs 
+async function fetchPokeList() {
+  let response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=20&offset=0");
+  const data = await response.json();
+  return data; // return data very important so loadAllpokemons can work with const data. 
+}
+
+async function fetchPokeDetails (resultDataIndex) {
+  const data = await fetchPokeList(); // definition of data (fetchpokeList) for this scope
+  let pokeUrl = data.results[resultDataIndex].url; //url used with counter to count through all urls.
+  let pokeData = await fetch(pokeUrl); // get the data from the URL
+  let pokeDetails = await pokeData.json(); // parse the fetched Pokémon data
+  showPokeTypeZero(pokeDetails)
+  return pokeDetails;
+}
+
+async function loadAllPokemons() {
+  const data = await fetchPokeList();
+
+  for (let i = 0; i < data.results.length; i++) {
+    const pokeName = data.results[i].name;
+
+    const pokeDetails = await fetchPokeDetails(i);
+    const pokePng = pokeDetails.sprites.front_default;
+
+    const pokeTypesZero = await showPokeTypeZero(pokeDetails);
+    const pokeTypesOnePng = await showPokeTypeOne(pokeDetails);
+
+    const contentRef = document.getElementById("display-area");
+    contentRef.innerHTML += returnDisplays(i, pokeDetails, pokeName, pokePng, pokeTypesZero, pokeTypesOnePng);
+  }
+}
+
+async function showPokeTypeOne(details) {
+  const typeInfo = details.types[1]
+    ? await (await fetch(details.types[1].type.url)).json()
+    : undefined; // if got value then define else empty string, variable now ready to fetch get
+  const typeIcon = typeInfo
+    ? typeInfo.sprites["generation-iii"]?.["xd"]?.name_icon
+    : ""; // : '' solved an error :undefined occures to be an error in the dom
+  return typeIcon;
+}
+
+async function showPokeTypeZero(details) {
+  let pokeTypeZeroUrl = details.types[0].type.url;
+  let pokeTypeZeroUrlData = await fetch(pokeTypeZeroUrl);
+  let pokeTypeZeroPng = await pokeTypeZeroUrlData.json();
+  return pokeTypeZeroPng.sprites["generation-iii"]["xd"].name_icon;
+}
 
