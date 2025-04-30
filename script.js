@@ -8,10 +8,12 @@ function renderContent() {
   returnFooter();
 }
 
+let loadButton = true;
+
 async function renderPokeCards() {
   try {
       loadingSpinner()
-      const delay = new Promise(resolve => setTimeout(resolve, 3000));
+      const delay = new Promise(resolve => setTimeout(resolve, 500));
       await delay; // now waiting 1 second - neccessary for the spinner!!!
       removeSpinner()
       await loadAllPokemons(); // after spinner is done - content loaded 
@@ -31,7 +33,7 @@ async function fetchPokeDetails (resultDataIndex) {
   let pokeUrl = data.results[resultDataIndex].url; //url used with counter to count through all urls.
   let pokeData = await fetch(pokeUrl); // get the data from the URL
   let pokeDetails = await pokeData.json(); // parse the fetched Pokémon data
-  showPokeTypeZero(pokeDetails)
+  showPokeTypeZero(pokeDetails);
   return pokeDetails;
 }
 
@@ -53,7 +55,7 @@ async function showPokeTypeOne(details) {
     ? await (await fetch(details.types[1].type.url)).json()
     : undefined; // if got value then define else empty string, variable now ready to fetch get
   const typeIcon = typeInfo
-    ? typeInfo.sprites["generation-iii"]?.["xd"]?.name_icon
+    ? typeInfo.sprites["generation-vii"]?.["sun-moon"]?.name_icon
     : ""; // : '' solved an error :undefined occures to be an error in the dom
   return typeIcon;
 }
@@ -62,7 +64,7 @@ async function showPokeTypeZero(details) {
   let pokeTypeZeroUrl = details.types[0].type.url;
   let pokeTypeZeroUrlData = await fetch(pokeTypeZeroUrl);
   let pokeTypeZeroPng = await pokeTypeZeroUrlData.json();
-  return pokeTypeZeroPng.sprites["generation-iii"]["xd"].name_icon;
+  return pokeTypeZeroPng.sprites["generation-vii"]["sun-moon"].name_icon;
 }
 
 function loadingSpinner() {
@@ -78,4 +80,55 @@ function loadingSpinner() {
 function removeSpinner() {
   const spinnerAreaRef = document.getElementById('loading-spinner-area');
   spinnerAreaRef.innerHTML = "";
+}
+
+async function fetchPokeSecondList() {
+  let response = await fetch(
+    "https://pokeapi.co/api/v2/pokemon?limit=20&offset=20"
+  );
+  const data = await response.json();
+  return data; // return data very important so loadAllpokemons can work with const data.
+}
+
+async function fetchPokeSecondDetails(secondResultDataIndex) {
+  const data = await fetchPokeSecondList(secondResultDataIndex); // definition of data (fetchpokeList) for this scope
+  let pokeUrl = data.results[secondResultDataIndex].url; //url used with counter to count through all urls/
+  let pokeData = await fetch(pokeUrl); // get the data from the URL
+  let pokeDetails = await pokeData.json(); // parse the fetched Pokémon data */
+  return pokeDetails;
+}
+
+async function loadMorePokemons() {
+  if (loadButton == true) {
+    const data = await fetchPokeSecondList();
+    for (let i = 0; i < data.results.length; i++) {
+      const pokeName = data.results[i].name;
+      const pokeDetails = await fetchPokeSecondDetails(i);
+      const pokePng = pokeDetails.sprites.front_default;
+      const pokeTypesZero = await showMorePokeTypeZero(pokeDetails);
+      const pokeTypesOnePng = await showPokeTypeOne(pokeDetails);
+      const contentRef = document.getElementById("display-area");
+      contentRef.innerHTML += returnMoreDisplays(i, pokeName, pokeDetails, pokePng, pokeTypesZero, pokeTypesOnePng);
+    }
+    loadButton = false;
+  }
+}
+
+async function showMorePokeTypeZero(details) {
+  let pokeTypeZeroUrl = details.types[0].type.url;
+  let pokeTypeZeroUrlData = await fetch(pokeTypeZeroUrl);
+  let pokeTypeZeroPng = await pokeTypeZeroUrlData.json();
+  console.log(details.types[0].type);
+  
+  return pokeTypeZeroPng.sprites["generation-vii"]["sun-moon"].name_icon;
+}
+
+async function showMorePokeTypeOne(details) {
+  const typeInfo = details.types[1]
+    ? await (await fetch(details.types[1].type.url)).json()
+    : undefined; // if got value then define else empty string, variable now ready to fetch get
+  const typeIcon = typeInfo
+    ? typeInfo.sprites["generation-vii"]?.["sun-moon"]?.name_icon
+    : ""; // : '' solved an error :undefined occures to be an error in the dom
+  return typeIcon;
 }

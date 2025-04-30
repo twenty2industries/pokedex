@@ -17,3 +17,19 @@
 .normal {
   background-color: #ada57b;
 }
+
+.poison{
+  background-color: #a5429c;
+}
+
+.electric{
+  background-color: #e2d73b;
+}
+
+.fairy {
+  background-color: #ffadf8;
+}
+
+.ground{
+  background-color: #918232;
+}
