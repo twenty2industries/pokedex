@@ -2,6 +2,7 @@ function init() {
   renderContent();
   renderPokeCards();
 }
+
 function renderContent() {
   returnHeader();
   returnFooter();
@@ -9,12 +10,14 @@ function renderContent() {
 
 async function renderPokeCards() {
   try {
-      const delay = new Promise(resolve => setTimeout(resolve, 1000));
+      loadingSpinner()
+      const delay = new Promise(resolve => setTimeout(resolve, 3000));
       await delay; // now waiting 1 second - neccessary for the spinner!!!
+      removeSpinner()
       await loadAllPokemons(); // after spinner is done - content loaded 
   } catch (error) {
       console.error("error:", error);
-  }
+  }     
 }
 
 async function fetchPokeList() {
@@ -34,7 +37,6 @@ async function fetchPokeDetails (resultDataIndex) {
 
 async function loadAllPokemons() {
   const data = await fetchPokeList();
-
   for (let i = 0; i < data.results.length; i++) {
     const pokeName = data.results[i].name;
     const pokeDetails = await fetchPokeDetails(i);
@@ -58,10 +60,22 @@ async function showPokeTypeOne(details) {
 
 async function showPokeTypeZero(details) {
   let pokeTypeZeroUrl = details.types[0].type.url;
-  console.log(details.types[0].type.name);
-  
   let pokeTypeZeroUrlData = await fetch(pokeTypeZeroUrl);
   let pokeTypeZeroPng = await pokeTypeZeroUrlData.json();
   return pokeTypeZeroPng.sprites["generation-iii"]["xd"].name_icon;
 }
 
+function loadingSpinner() {
+  const spinnerAreaRef = document.getElementById('loading-spinner-area');
+  spinnerAreaRef.innerHTML += `      <div class="loadingSpinner">
+        <img
+          src="assets/loadingSpinner/loadingSpinner.gif"
+          class="loadingSpinnerGif"
+        />
+      </div>`;
+}
+
+function removeSpinner() {
+  const spinnerAreaRef = document.getElementById('loading-spinner-area');
+  spinnerAreaRef.innerHTML = "";
+}
