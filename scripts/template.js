@@ -42,22 +42,26 @@ function returnBigOverlay(index, name, details, image, typeZero, typeOneImg) {
   <div id="display-big-area" class="displayBigArea">
     <div id="display-0${displayCounter}" class="displaysBig">
       <div id="pokemon-name-area-0${displayCounter}" class="pokemonNameAreaBig">
-        <div id="pokemon-number-0${displayCounter}" class="pokemonNumber"># ${details.id}</div>
+        <div id="pokemon-number-0${displayCounter}" class="pokemonNumber"># ${
+    details.id
+  }</div>
         <div id="pokemon-name-0${displayCounter}" class="pokemonName">${name.toUpperCase()}</div>
         </div>
-      <div id="pokemon-picture-area-0${displayCounter}" class="pokemonPictureAreaOverlay ${details.types[0].type.name}" >
+      <div id="pokemon-picture-area-0${displayCounter}" class="pokemonPictureAreaOverlay ${
+    details.types[0].type.name
+  }" >
       <img class="pokemonImageBig" src="${image}">
       </div>
       <div id="element-info-area-0${displayCounter}" class="elementInfoAreaBig">
         <img class="pokeTypeInfoBig" src="${typeZero}">
         <img class="pokeTypeInfoBig" src="${typeOneImg}">
       </div>
-              <div class="statsOverlay ${details.types[0].type.name}" id="stats-overlay">
-                      <span class="mainStat" id="main-stats">MAIN</span>
-        <span class="mainStat" id="stats-stats">STATS</span>
-        <span class="mainStat" id="evo-chain-stats">EVO CHAIN</span>
+              <div class="statsOverlay ${
+                details.types[0].type.name
+              }" id="stats-overlay">
               </div>
-              <div class="statsOverlayDetails" id="stats-overlay-details"></div>
+              <div class="statsOverlayDetails" id="stats-overlay-details">
+      </div>
     </div>
   </div>
 </div>`;
@@ -67,4 +71,39 @@ function returnFooter() {
   const footerRef = document.getElementById("footer-area");
   footerRef.innerHTML += `<img class="logoFooter" src="assets/logo/logoFooter.png"/>
 `;
+}
+
+function returnStatsNavigation(abilityName, weight, height) {
+  const statsNavRef = document.getElementById('stats-overlay')
+  return statsNavRef.innerHTML += `<span class="mainStat" id="main-stats" onclick="returnMainStatsOverlay('${abilityName}', ${weight}, ${height})">MAIN</span>
+                      <span class="mainStat" id="stats-stats" onclick="renderStatsStatsOverlay()">STATS</span>
+                      <span class="mainStat" id="evo-chain-stats" onclick="renderEvoStatsOverlay()">EVO CHAIN</span>
+              </div>
+`;
+}
+
+function returnMainStatsOverlay(abilityName, weight, height) {
+  const mainStatsOverlayRef = document.getElementById('stats-overlay-details');
+  return mainStatsOverlayRef.innerHTML =
+  `<div class="pokeStatsOverlay">Height: ${height}</div>
+  <div class="pokeStatsOverlay">Weight: ${weight}</div>
+  <div class="pokeStatsOverlay">Abilities: ${abilityName} </div>`
+}
+
+function returnStatsStatsOverlay() {
+  const StatsStatsOverlayRef = document.getElementById('stats-overlay-details');
+  return StatsStatsOverlayRef.innerHTML +=
+  `<div class="pokeStatsOverlay">attack: </div>
+  <div class="pokeStatsOverlay">defense: </div>
+  <div class="pokeStatsOverlay">special-attack: </div>
+  <div class="pokeStatsOverlay">special-defense: </div>
+  <div class="pokeStatsOverlay">speed: </div>`
+}
+
+function returnEvoStatsOverlay() {
+  const evoStatsOverlayRef = document.getElementById('stats-overlay-details');
+  return evoStatsOverlayRef.innerHTML +=
+  `<div class="pokeStatsOverlay">evo 1: </div>
+  <div class="pokeStatsOverlay">evo 2: </div>
+  <div class="pokeStatsOverlay">evo 3: </div>`
 }
