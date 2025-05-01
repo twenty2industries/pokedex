@@ -37,6 +37,8 @@ async function fetchPokeList() {
   return data; // return data very important so loadAllpokemons can work with const data.
 }
 
+
+
 async function fetchPokeDetails(resultDataIndex) {
   const data = await fetchPokeList(); // definition of data (fetchpokeList) for this scope
   let pokeUrl = data.results[resultDataIndex].url; //url used with counter to count through all urls.
@@ -107,7 +109,7 @@ function removeLoadMoreIcon() {
 
 async function fetchBigOverlayPokeList() {
   let response = await fetch(
-    "https://pokeapi.co/api/v2/pokemon?limit=1000&offset=0"
+    "https://pokeapi.co/api/v2/pokemon?limit=500&offset=0"
   );
   const data = await response.json();
   return data; // return data very important so loadAllpokemons can work with const data.
@@ -122,16 +124,17 @@ async function fetchBigOverlayPokeDetails(resultDataIndex) {
   return pokeDetails;
 }
 
-async function loadAllBigOverlayPokemons(index) {
-  const data = await fetchBigOverlayPokeDetails(index);
+async function loadAllBigOverlayPokemons(displayCounter) {
+  const data = await fetchBigOverlayPokeDetails(displayCounter);
   const pokeName = data.name;
   const pokeDetails = data;
   const pokePng = pokeDetails.sprites.front_default;
   const pokeTypesZero = await showPokeTypeZero(pokeDetails);
   const pokeTypesOnePng = await showPokeTypeOne(pokeDetails);
   const contentRef = document.getElementById("big-overlay");
-  contentRef.innerHTML = returnBigOverlay(index, pokeName, pokeDetails, pokePng, pokeTypesZero, pokeTypesOnePng);
-  renderAbilityNames(pokeDetails);
+  contentRef.innerHTML = returnBigOverlay(displayCounter, pokeName, pokeDetails, pokePng, pokeTypesZero, pokeTypesOnePng);
+  returnStatStatsNavigation(pokeDetails);
+  renderAbilityNamesOverlay(pokeDetails);
 }
 
 function openBigOverlay() {
@@ -162,14 +165,23 @@ function renderEvoStatsOverlay() {
   returnEvoStatsOverlay();
 }
 
-function renderAbilityNames(abilitiesDetails) {
+function renderAbilityNamesOverlay(abilitiesDetails) {
   let abilityName = "";
   let weight = abilitiesDetails.weight;
-  let height = abilitiesDetails.height
-  
+  let height = abilitiesDetails.height;  
   for (let f = 0; f < abilitiesDetails.abilities.length; f++) {
     abilityName += abilitiesDetails.abilities[f].ability.name + "  ";
     returnMainStatsOverlay(abilityName, weight, height);  
   }
-  returnStatsNavigation(abilityName, weight, height);
+  returnStatsNavigation(abilityName, weight, height);// neccessary to give the argument to onclick="returnMainStatsOverlay('${abilityName}', ${weight}, ${height})"
+}
+
+async function renderStatsNamesOverlay() {
+  const statsStatsOverlayRef = document.getElementById("stats-overlay-details");
+  statsStatsOverlayRef.innerHTML = "";
+  const data = await fetchBigOverlayPokeDetails(displayCounter);
+  let pokeDetails = data.stats;
+  for (let g = 0; g < pokeDetails.length; g++) {
+    returnStatsStatsOverlay(pokeDetails[g].base_stat, pokeDetails[g].stat.name);
+  }
 }
