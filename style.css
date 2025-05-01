@@ -67,7 +67,6 @@ header {
     font-size: 2.4rem;
     color: white;
     width: 50rem;
-    height: 65rem;
     cursor: pointer;
 
     .pokemonNameArea {
@@ -100,7 +99,7 @@ header {
   .displays:hover {
     border-bottom-right-radius: 7rem;
     border-top-left-radius: 7rem;
-    border: rgba(0, 0, 0, 0.144) 7px solid;
+    border: rgba(0, 0, 0, 0.144) -7px solid;
   }
 
   .pokemonPictureArea {
@@ -108,10 +107,10 @@ header {
     align-items: center;
     justify-content: center;
     padding: 2rem 3rem;
-    height: 40rem;
+    height: 26rem;
 
     .pokemonImage {
-      height: 43rem;
+      height: 28rem;
     }
   }
 
@@ -255,9 +254,8 @@ header {
   }
   .statsOverlayDetails{
     width: 100%;
-    background-color: black;
+    background-color: rgb(90, 90, 90);
     height: 34rem;
-    border-bottom-left-radius: 10rem;
     border-bottom-right-radius: 10rem;
   }
 }

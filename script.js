@@ -9,7 +9,8 @@ function renderContent() {
 }
 
 const loadButton = true;
-let displayCounter = 0; // neccesary to open big overlay after the count of 30 
+let displayCounter = 0; // neccesary to open big overlay after the count of 30
+let renderCounter = 0;
 
 async function renderPokeCards() {
   try {
@@ -29,7 +30,7 @@ function removeSpinner() {
 }
 
 async function fetchPokeList() {
-  let response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=20&offset=0");
+  let response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=20&offset=${renderCounter}`);
   const data = await response.json();
   return data; // return data very important so loadAllpokemons can work with const data. 
 }
@@ -55,90 +56,41 @@ async function loadAllPokemons() {
     contentRef.innerHTML += returnDisplays(i, pokeDetails, pokeName, pokePng, pokeTypesZero, pokeTypesOnePng);
     displayCounter++;
   }
+  renderCounter += 20;
 }
 
-async function showPokeTypeOne(details) {
-  const typeInfo = details.types[1]
-    ? await (await fetch(details.types[1].type.url)).json()
-    : undefined; // if got value then define else empty string, variable now ready to fetch get
-  const typeIcon = typeInfo
-    ? typeInfo.sprites["generation-vii"]?.["sun-moon"]?.name_icon
-    : ""; // : '' solved an error :undefined occures to be an error in the dom
-  return typeIcon;
-}
+  async function showPokeTypeOne(details) {
+    const typeInfo = details.types[1]
+      ? await (await fetch(details.types[1].type.url)).json()
+      : undefined; // if got value then define else empty string, variable now ready to fetch get
+    const typeIcon = typeInfo
+      ? typeInfo.sprites["generation-vii"]?.["sun-moon"]?.name_icon
+      : ""; // : '' solved an error :undefined occures to be an error in the dom
+    return typeIcon;
+  }
 
-async function showPokeTypeZero(details) {
-  let pokeTypeZeroUrl = details.types[0].type.url;
-  let pokeTypeZeroUrlData = await fetch(pokeTypeZeroUrl);
-  let pokeTypeZeroPng = await pokeTypeZeroUrlData.json();
-  return pokeTypeZeroPng.sprites["generation-vii"]["sun-moon"].name_icon;
-}
-
-
-async function fetchPokeSecondList() {
-  let response = await fetch(
-    "https://pokeapi.co/api/v2/pokemon?limit=20&offset=20"
-  );
-  const data = await response.json();
-  return data; // return data very important so loadAllpokemons can work with const data.
-}
-
-async function fetchPokeSecondDetails(secondResultDataIndex) {
-  const data = await fetchPokeSecondList(secondResultDataIndex); // definition of data (fetchpokeList) for this scope
-  let pokeUrl = data.results[secondResultDataIndex].url; //url used with counter to count through all urls/
-  let pokeData = await fetch(pokeUrl); // get the data from the URL
-  let pokeDetails = await pokeData.json(); // parse the fetched Pokémon data */
-  return pokeDetails;
-}
+  async function showPokeTypeZero(details) {
+    let pokeTypeZeroUrl = details.types[0].type.url;
+    let pokeTypeZeroUrlData = await fetch(pokeTypeZeroUrl);
+    let pokeTypeZeroPng = await pokeTypeZeroUrlData.json();
+    return pokeTypeZeroPng.sprites["generation-vii"]["sun-moon"].name_icon;
+  }
 
 async function triggerMorePokemons() {
   try {
-    removeMoreButton();
+    toggleMoreButton();
     getLoadMoreIcon();
     const delay = new Promise((resolve) => setTimeout(resolve, 3000));
     await delay; // now waiting 1 second - neccessary for the spinner!!!
     removeLoadMoreIcon();
-    await loadMorePokemons(); // after spinner is done - content loaded
+    toggleMoreButton();
+    await loadAllPokemons(); // after spinner is done - content loaded
   } catch (error) {}
 }
 
-async function loadMorePokemons() {
-  if (loadButton == true) {
-    const data = await fetchPokeSecondList();
-    for (let i = 0; i < data.results.length; i++) {
-      const pokeName = data.results[i].name;
-      const pokeDetails = await fetchPokeSecondDetails(i);
-      const pokePng = pokeDetails.sprites.front_default;
-      const pokeTypesZero = await showMorePokeTypeZero(pokeDetails);
-      const pokeTypesOnePng = await showPokeTypeOne(pokeDetails);
-      const contentRef = document.getElementById("display-area");
-      contentRef.innerHTML += returnMoreDisplays(i, pokeName, pokeDetails, pokePng, pokeTypesZero, pokeTypesOnePng);
-      displayCounter++;
-    }
-    loadButton = false;
-  }
-}
-
-async function showMorePokeTypeZero(details) {
-  let pokeTypeZeroUrl = details.types[0].type.url;
-  let pokeTypeZeroUrlData = await fetch(pokeTypeZeroUrl);
-  let pokeTypeZeroPng = await pokeTypeZeroUrlData.json();
-  return pokeTypeZeroPng.sprites["generation-vii"]["sun-moon"].name_icon;
-}
-
-async function showMorePokeTypeOne(details) {
-  const typeInfo = details.types[1]
-    ? await (await fetch(details.types[1].type.url)).json()
-    : undefined; 
-  const typeIcon = typeInfo
-    ? typeInfo.sprites["generation-vii"]?.["sun-moon"]?.name_icon
-    : ""; 
-  return typeIcon;
-}
-
-function removeMoreButton() {
+function toggleMoreButton() {
   const buttonRef = document.getElementById('load-more-button');
-  buttonRef.classList.add('d_none');
+  buttonRef.classList.toggle('d_none');
 }
 
 function getLoadMoreIcon() {
@@ -152,7 +104,7 @@ function removeLoadMoreIcon() {
 }
 
 async function fetchBigOverlayPokeList() {
-  let response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=40&offset=0");
+  let response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=1000&offset=0");
   const data = await response.json();
   return data; // return data very important so loadAllpokemons can work with const data. 
 }
@@ -168,20 +120,13 @@ async function fetchBigOverlayPokeDetails (resultDataIndex) {
 
 async function loadAllBigOverlayPokemons(index) {
   const data = await fetchBigOverlayPokeDetails(index); 
-
   const pokeName = data.name;
   const pokeDetails = data;
   const pokePng = pokeDetails.sprites.front_default;
   const pokeTypesZero = await showPokeTypeZero(pokeDetails);
   const pokeTypesOnePng = await showPokeTypeOne(pokeDetails);
   const contentRef = document.getElementById("big-overlay");
-
   contentRef.innerHTML = returnBigOverlay(index, pokeName, pokeDetails, pokePng, pokeTypesZero, pokeTypesOnePng);
-}
-
-function selectBigOverlay(index) {
-  const overlayRef = document.getElementById("big-overlay");
-  openBigOverlay(index);
 }
 
 function openBigOverlay() {
@@ -189,9 +134,9 @@ function openBigOverlay() {
   openOverlayRef.innerHTML += returnBigOverlay();
 }
 
-
 function closeBigOverlay() {
     const openOverlayRef = document.getElementById("big-overlay");
   return openOverlayRef.innerHTML = "";
 }
+
 
