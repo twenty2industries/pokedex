@@ -37,8 +37,6 @@ async function fetchPokeList() {
   return data; // return data very important so loadAllpokemons can work with const data.
 }
 
-
-
 async function fetchPokeDetails(resultDataIndex) {
   const data = await fetchPokeList(); // definition of data (fetchpokeList) for this scope
   let pokeUrl = data.results[resultDataIndex].url; //url used with counter to count through all urls.
@@ -57,8 +55,8 @@ async function loadAllPokemons() {
     const pokeTypesZero = await showPokeTypeZero(pokeDetails);
     const pokeTypesOnePng = await showPokeTypeOne(pokeDetails);
     const contentRef = document.getElementById("display-area");
-    contentRef.innerHTML += returnDisplays(i, pokeDetails, pokeName, pokePng, pokeTypesZero, pokeTypesOnePng); 
-      displayCounter++;
+    contentRef.innerHTML += returnDisplays(i, pokeDetails, pokeName, pokePng, pokeTypesZero, pokeTypesOnePng);
+    displayCounter++;
   }
   renderCounter += 20;
 }
@@ -115,9 +113,9 @@ async function fetchBigOverlayPokeList() {
   return data; // return data very important so loadAllpokemons can work with const data.
 }
 
-async function fetchBigOverlayPokeDetails(resultDataIndex) {
+async function fetchBigOverlayPokeDetails(displayCounter) {
   const data = await fetchBigOverlayPokeList(); // definition of data (fetchpokeList) for this scope
-  let pokeUrl = data.results[resultDataIndex].url; //url used with counter to count through all urls.
+  let pokeUrl = data.results[displayCounter].url; //url used with counter to count through all urls.
   let pokeData = await fetch(pokeUrl); // get the data from the URL
   let pokeDetails = await pokeData.json(); // parse the fetched Pokémon data
   showPokeTypeZero(pokeDetails);
@@ -133,8 +131,10 @@ async function loadAllBigOverlayPokemons(displayCounter) {
   const pokeTypesOnePng = await showPokeTypeOne(pokeDetails);
   const contentRef = document.getElementById("big-overlay");
   contentRef.innerHTML = returnBigOverlay(displayCounter, pokeName, pokeDetails, pokePng, pokeTypesZero, pokeTypesOnePng);
-  returnStatStatsNavigation(pokeDetails);
   renderAbilityNamesOverlay(pokeDetails);
+  returnStatStatsNavigation(pokeDetails);
+  returnInfoNavigation(pokeDetails.id);
+
 }
 
 function openBigOverlay() {
@@ -145,24 +145,6 @@ function openBigOverlay() {
 function closeBigOverlay() {
   const openOverlayRef = document.getElementById("big-overlay");
   return (openOverlayRef.innerHTML = "");
-}
-
-function renderMainStatsOverlay(overlayAbilityNames) {
-  const mainStatsOverlayRef = document.getElementById('stats-overlay-details');
-  mainStatsOverlayRef.innerHTML = '';
-  returnMainStatsOverlay(overlayAbilityNames);
-}
-
-function renderStatsStatsOverlay() {
-  const mainStatsOverlayRef = document.getElementById('stats-overlay-details');
-  mainStatsOverlayRef.innerHTML = '';
-  returnStatsStatsOverlay();
-}
-
-function renderEvoStatsOverlay() {
-  const mainStatsOverlayRef = document.getElementById('stats-overlay-details');
-  mainStatsOverlayRef.innerHTML = '';
-  returnEvoStatsOverlay();
 }
 
 function renderAbilityNamesOverlay(abilitiesDetails) {
@@ -184,4 +166,16 @@ async function renderStatsNamesOverlay() {
   for (let g = 0; g < pokeDetails.length; g++) {
     returnStatsStatsOverlay(pokeDetails[g].base_stat, pokeDetails[g].stat.name);
   }
+}
+
+async function renderInfoOverlay(id) {
+let speciesUrl = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${id}/`);
+let flavorText = await speciesUrl.json();
+let englishFlavorText = flavorText.flavor_text_entries.find(entry => entry.language.name === 'en'); 
+let flavorTextInput = englishFlavorText.flavor_text;
+console.log(flavorTextInput);
+
+console.log(flavorText);
+
+  returnInfoOverlay(flavorTextInput);
 }
