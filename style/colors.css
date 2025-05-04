@@ -33,3 +33,35 @@
 .ground{
   background-color: #918232;
 }
+
+.fighting{
+  background-color: #9d5139;
+}
+
+.psychic{
+  background-color: #DA4f84;
+}
+
+.rock{
+  background-color: #BBAA66;
+}
+
+.ghost{
+  background-color: #6666BB;
+}
+
+.ice{
+  background-color: #31aacf;
+}
+
+.dragon{
+  background-color: #5d50a4;
+}
+
+.dark{
+  background-color: #775544;
+}
+
+.steel{
+  background-color: #aaaabb;
+}
