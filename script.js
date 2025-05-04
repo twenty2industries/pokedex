@@ -11,11 +11,12 @@ function renderContent() {
 const loadButton = true;
 let displayCounter = 0; // neccesary to open big overlay after the count of 30
 let renderCounter = 0;
+let overlayCounter = 0;
 
 async function renderPokeCards() {
   try {
     loadingSpinner();
-    const delay = new Promise((resolve) => setTimeout(resolve, 3000));
+    const delay = new Promise((resolve) => setTimeout(resolve, 2000));
     await delay; // now waiting 1 second - neccessary for the spinner!!!
     removeSpinner();
     await loadAllPokemons(); // after spinner is done - content loaded
@@ -82,7 +83,7 @@ async function triggerMorePokemons() {
   try {
     toggleMoreButton();
     getLoadMoreIcon();
-    const delay = new Promise((resolve) => setTimeout(resolve, 1000));
+    const delay = new Promise((resolve) => setTimeout(resolve, 750));
     await delay; // now waiting 1 second - neccessary for the spinner!!!
     removeLoadMoreIcon();
     toggleMoreButton();
@@ -134,18 +135,41 @@ async function loadAllBigOverlayPokemons(displayCounter) {
   renderAbilityNamesOverlay(pokeDetails);
   returnStatStatsNavigation(pokeDetails);
   returnInfoNavigation(pokeDetails.id);
-
+  overlayCounter = pokeDetails.id;
+  addOverflowHidden();
 }
 
-function openBigOverlay() {
-  const openOverlayRef = document.getElementById("big-overlay");
-  openOverlayRef.innerHTML += returnBigOverlay();
+function addOverflowHidden() {
+  const bodyRef = document.getElementById('body');
+  bodyRef.classList.add('hidden_overflow');
 }
 
-function closeBigOverlay() {
-  const openOverlayRef = document.getElementById("big-overlay");
-  return (openOverlayRef.innerHTML = "");
+function removeOverflowHidden() {
+  const bodyRef = document.getElementById('body');
+  bodyRef.classList.remove('hidden_overflow');
 }
+
+
+async function loadNextgBigOverlayPokemons() {
+  loadAllBigOverlayPokemons(overlayCounter);
+}
+
+async function loadPreviousBigOverlayPokemons() {
+  if (overlayCounter !== 1) {
+    overlayCounter-=2; // -2 becaused -1 is the current index and we need the previous one 
+    loadAllBigOverlayPokemons(overlayCounter);
+  }
+}
+
+function closeBigOverlay(event) {
+  if (event.target.classList.contains('bigOverlay')) {
+    const openOverlayRef = document.getElementById("big-overlay");
+    openOverlayRef.innerHTML = "";
+    removeOverflowHidden();
+  }
+}
+
+document.getElementById('content-area').addEventListener("click", closeBigOverlay);
 
 function renderAbilityNamesOverlay(abilitiesDetails) {
   let abilityName = "";
@@ -169,13 +193,10 @@ async function renderStatsNamesOverlay() {
 }
 
 async function renderInfoOverlay(id) {
-let speciesUrl = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${id}/`);
-let flavorText = await speciesUrl.json();
-let englishFlavorText = flavorText.flavor_text_entries.find(entry => entry.language.name === 'en'); 
-let flavorTextInput = englishFlavorText.flavor_text;
-console.log(flavorTextInput);
-
-console.log(flavorText);
-
-  returnInfoOverlay(flavorTextInput);
+  let speciesUrl = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${id}/`);
+  let flavorText = await speciesUrl.json();
+  let englishFlavorText = flavorText.flavor_text_entries.find(entry => entry.language.name === 'en'); 
+  let flavorTextInput = englishFlavorText.flavor_text;
+  let cleanFlavorTextInput = flavorTextInput.replace("\f", "");
+  returnInfoOverlay(cleanFlavorTextInput);
 }

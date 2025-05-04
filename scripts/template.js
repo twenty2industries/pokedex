@@ -40,9 +40,6 @@ function returnDisplays(index, details, name, image, typeZero, typeOneImg) {
 //big-overlay id by details.id is not neccessary, no need for mupltiple ids on the big overlay. only 1 display at a time
 function returnBigOverlay(index, name, details, image, typeZero, typeOneImg) {
   return `<div class="bigOverlay">
-  <div class="buttonDiv"><button class="loadMoreButtonOverlay ${
-    details.types[0].type.name
-  }" onclick="closeBigOverlay()">x</button></div>
   <div id="display-big-area" class="displayBigArea">
     <div id="display-0${details.id}" class="displaysBig">
       <div id="pokemon-name-area-0${details.id}" class="pokemonNameAreaBig">
@@ -63,8 +60,11 @@ function returnBigOverlay(index, name, details, image, typeZero, typeOneImg) {
               <div class="statsOverlay ${
                 details.types[0].type.name
               }" id="stats-overlay">
+                            <button class="loadMoreButtonOverlay" onclick="loadPreviousBigOverlayPokemons(${overlayCounter})">-</button>
+                            <button class="loadMoreButtonOverlay" onclick="loadNextgBigOverlayPokemons(${overlayCounter})">+</button>
               </div>
               <div class="statsOverlayDetails" id="stats-overlay-details"></div>
+              
     </div>
   </div>
 </div>`;
