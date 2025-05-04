@@ -152,21 +152,20 @@ header {
   transform: translate(-50%, -50%);
 
   .buttonDiv {
-    width: 100%;
-    margin-top: 12rem;
+    position: absolute;
+    top: 8.4rem;
     display: flex;
     justify-content: end;
-    margin-right: 10rem;
 
     .loadMoreButtonOverlay {
       font-size: 2rem;
-      color: rgb(0, 0, 0);
+      border: none;
+      color: rgb(255, 255, 255);
       font-weight: bold;
-      margin-top: 5rem;
-      background-color: rgb(187, 187, 187);
-      width: 10rem;
+      width: 8rem;
       height: 6rem;
       cursor: pointer;
+      z-index: 20;
     }
 
     .loadMoreButtonOverlay:hover {
@@ -185,8 +184,9 @@ header {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 90rem;
+    width: 65rem;
     height: 66rem;
+    margin-top: 20rem;
   }
 
   .pokemonPictureAreaOverlay {
@@ -210,7 +210,7 @@ header {
     .pokemonNameAreaBig {
       width: 100%;
       background-color: rgb(90, 90, 90);
-      height: 10rem;
+      height: 7rem;
       display: flex;
       flex-direction: row;
       align-items: center;
@@ -263,15 +263,13 @@ header {
     justify-content: space-evenly;
     width: 100%;
     background-color: rgb(90, 90, 90);
-    height: 34rem;
+    height: 25rem;
     border-bottom-right-radius: 10rem;
 
     .pokeStatsOverlay {
       display: flex;
       align-items: center;
-      padding-left: 3rem;
-      width: 100%;
-      background-color: black;
+      padding: 0rem 3rem;
       height: 7rem;
     }
   }
