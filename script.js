@@ -1,6 +1,7 @@
 function init() {
   renderContent();
   renderPokeCards();
+  ShowNames();
 }
 
 function renderContent() {
@@ -8,18 +9,18 @@ function renderContent() {
   returnFooter();
 }
 
-const loadButton = true;
-let displayCounter = 0; // neccesary to open big overlay after the count of 30
+let displayCounter = 0;
 let renderCounter = 0;
 let overlayCounter = 0;
 
 async function renderPokeCards() {
   try {
     loadingSpinner();
-    const delay = new Promise((resolve) => setTimeout(resolve, 2000));
-    await delay; // now waiting 1 second - neccessary for the spinner!!!
-    removeSpinner();
+    const spinnerMinDuration = new Promise((resolve) => setTimeout(resolve, 2000));
+    await spinnerMinDuration; // now waiting- neccessary for the spinner!!!
     await loadAllPokemons(); // after spinner is done - content loaded
+    document.getElementById('pokeNameInput').addEventListener("keydown", filterNames);
+    removeSpinner();
   } catch (error) {
     console.error("error:", error);
   }
@@ -31,9 +32,7 @@ function removeSpinner() {
 }
 
 async function fetchPokeList() {
-  let response = await fetch(
-    `https://pokeapi.co/api/v2/pokemon?limit=20&offset=${renderCounter}`
-  );
+  let response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=20&offset=${renderCounter}`);
   const data = await response.json();
   return data; // return data very important so loadAllpokemons can work with const data.
 }
@@ -85,10 +84,12 @@ async function triggerMorePokemons() {
     getLoadMoreIcon();
     const delay = new Promise((resolve) => setTimeout(resolve, 750));
     await delay; // now waiting 1 second - neccessary for the spinner!!!
+    await loadAllPokemons(); // after spinner is done - content loaded
     removeLoadMoreIcon();
     toggleMoreButton();
-    await loadAllPokemons(); // after spinner is done - content loaded
-  } catch (error) {}
+  } catch (error) {
+    console.error("error:", error);
+  }
 }
 
 function toggleMoreButton() {
@@ -107,9 +108,7 @@ function removeLoadMoreIcon() {
 }
 
 async function fetchBigOverlayPokeList() {
-  let response = await fetch(
-    "https://pokeapi.co/api/v2/pokemon?limit=500&offset=0"
-  );
+  let response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=1000&offset=0");
   const data = await response.json();
   return data; // return data very important so loadAllpokemons can work with const data.
 }
@@ -123,19 +122,18 @@ async function fetchBigOverlayPokeDetails(displayCounter) {
   return pokeDetails;
 }
 
-async function loadAllBigOverlayPokemons(displayCounter) {
-  const data = await fetchBigOverlayPokeDetails(displayCounter);
+async function loadAllBigOverlayPokemons(overlayCounter) {
+  const data = await fetchBigOverlayPokeDetails(overlayCounter);
   const pokeName = data.name;
   const pokeDetails = data;
   const pokePng = pokeDetails.sprites.front_default;
   const pokeTypesZero = await showPokeTypeZero(pokeDetails);
   const pokeTypesOnePng = await showPokeTypeOne(pokeDetails);
   const contentRef = document.getElementById("big-overlay");
-  contentRef.innerHTML = returnBigOverlay(displayCounter, pokeName, pokeDetails, pokePng, pokeTypesZero, pokeTypesOnePng);
+  contentRef.innerHTML = returnBigOverlay(pokeDetails.id, pokeName, pokeDetails, pokePng, pokeTypesZero, pokeTypesOnePng);
   renderAbilityNamesOverlay(pokeDetails);
   returnStatStatsNavigation(pokeDetails);
   returnInfoNavigation(pokeDetails.id);
-  overlayCounter = pokeDetails.id;
   addOverflowHidden();
 }
 
@@ -150,14 +148,10 @@ function removeOverflowHidden() {
 }
 
 
-async function loadNextgBigOverlayPokemons() {
-  loadAllBigOverlayPokemons(overlayCounter);
-}
-
-async function loadPreviousBigOverlayPokemons() {
-  if (overlayCounter !== 1) {
-    overlayCounter-=2; // -2 becaused -1 is the current index and we need the previous one 
-    loadAllBigOverlayPokemons(overlayCounter);
+async function loadNextOrPreviousgBigOverlayPokemons(detail) {
+  const condition = detail + 1;
+  if (condition !== 0) {
+    loadAllBigOverlayPokemons(detail);
   }
 }
 
@@ -200,3 +194,42 @@ async function renderInfoOverlay(id) {
   let cleanFlavorTextInput = flavorTextInput.replace("\f", "");
   returnInfoOverlay(cleanFlavorTextInput);
 }
+
+const toFilteredNames =[];
+
+async function ShowNames(){
+  const data = await fetchBigOverlayPokeList();
+  for (let k = 0; k < data.results.length; k++) {
+    const allNames = data.results[k].name;
+    toFilteredNames.push(allNames);
+  }
+}
+
+async function filterNames() {
+  const inputRef = document.getElementById('pokeNameInput').value.toLowerCase();
+  const contentRef = document.getElementById("display-area");
+  contentRef.innerHTML = "";
+  if (inputRef.length >= 2) {
+    const filteredNames = toFilteredNames.filter(name => name.includes(inputRef));
+    const allPokemons = await fetchBigOverlayPokeList();
+    for (const name of filteredNames) {
+      const pokeIndex = allPokemons.results.findIndex(p => p.name === name);
+      if (pokeIndex !== -1) {
+        const pokeUrl = allPokemons.results[pokeIndex].url;
+        const response = await fetch(pokeUrl); 
+        const pokeDetails = await response.json();
+        const pokePng = pokeDetails.sprites.front_default;
+        const pokeTypesZero = await showPokeTypeZero(pokeDetails);
+        const pokeTypesOnePng = await showPokeTypeOne(pokeDetails);
+        contentRef.innerHTML += returnDisplays(pokeIndex + 1, pokeDetails, name, pokePng, pokeTypesZero, pokeTypesOnePng);
+        overlayCounter = 0;
+      }
+    }
+  } else if (inputRef.length === 0) {
+    contentRef.innerHTML = "";
+    renderCounter = 0;
+    await loadAllPokemons();
+  }
+}
+
+
