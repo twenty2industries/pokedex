@@ -12,12 +12,12 @@ function returnHeader() {
   const headerRef = document.getElementById("header-area");
   headerRef.innerHTML += `       <div class="headerArea">
       <img src="assets/logo/logo1.png" class="logo" />
-      <input class="input" type="text" placeholder="search " />
+      <input id="pokeNameInput" class="input" type="text" placeholder="search " />
     </div> `;
 }
 
 function returnDisplays(index, details, name, image, typeZero, typeOneImg) {
-  return `<div id="display-${details.id}" onclick="loadAllBigOverlayPokemons(${displayCounter})" class="displays">
+  return `<div id="display-${details.id}" onclick="loadAllBigOverlayPokemons(${details.id - 1})" class="displays">
           <div id="pokemon-name-area-${details.id}" class="pokemonNameArea">
             <div id="pokemon-number-${details.id}" class="pokemonNumber"># ${
     details.id
@@ -36,32 +36,29 @@ function returnDisplays(index, details, name, image, typeZero, typeOneImg) {
         </div>`;
 }
 
-
 //big-overlay id by details.id is not neccessary, no need for mupltiple ids on the big overlay. only 1 display at a time
 function returnBigOverlay(index, name, details, image, typeZero, typeOneImg) {
   return `<div class="bigOverlay">
   <div id="display-big-area" class="displayBigArea">
-    <div id="display-0${details.id}" class="displaysBig">
-      <div id="pokemon-name-area-0${details.id}" class="pokemonNameAreaBig">
-        <div id="pokemon-number-0${details.id}" class="pokemonNumber"># ${
-    details.id
-  }</div>
-        <div id="pokemon-name-0${details.id}" class="pokemonName">${name.toUpperCase()}</div>
+    <div id="display-0${index}" class="displaysBig">
+      <div id="pokemon-name-area-0${index}" class="pokemonNameAreaBig">
+        <div id="pokemon-number-0${index}" class="pokemonNumber"># ${index}</div>
+        <div id="pokemon-name-0${index}" class="pokemonName">${name.toUpperCase()}</div>
         </div>
-      <div id="pokemon-picture-area-0${details.id}" class="pokemonPictureAreaOverlay ${
+      <div id="pokemon-picture-area-0${index}" class="pokemonPictureAreaOverlay ${
     details.types[0].type.name
   }" >
       <img class="pokemonImageBig" src="${image}">
       </div>
-      <div id="element-info-area-0${details.id}" class="elementInfoAreaBig">
+      <div id="element-info-area-0${index}" class="elementInfoAreaBig">
         <img class="pokeTypeInfoBig" src="${typeZero}">
         <img class="pokeTypeInfoBig" src="${typeOneImg}">
       </div>
               <div class="statsOverlay ${
                 details.types[0].type.name
               }" id="stats-overlay">
-                            <button class="loadMoreButtonOverlay" onclick="loadPreviousBigOverlayPokemons(${overlayCounter})">-</button>
-                            <button class="loadMoreButtonOverlay" onclick="loadNextgBigOverlayPokemons(${overlayCounter})">+</button>
+                            <button class="loadMoreButtonOverlay" onclick="loadNextOrPreviousgBigOverlayPokemons(${details.id - 2})">-</button>
+                            <button class="loadMoreButtonOverlay" onclick="loadNextOrPreviousgBigOverlayPokemons(${details.id})">+</button>
               </div>
               <div class="statsOverlayDetails" id="stats-overlay-details"></div>
               
