@@ -80,7 +80,7 @@ function returnStatsNavigation(abilityName, weight, height) {
 
 function returnStatStatsNavigation(statName) {
   const statsNavRef = document.getElementById('stats-overlay');
-  return statsNavRef.innerHTML += `<span class="mainStat" id="stats-stats" onclick="renderStatsNamesOverlay('${statName}')">STATS</span>`;
+  return statsNavRef.innerHTML += `<span class="mainStat" id="stats-stats" onclick="renderStatsNamesOverlay(${statName})">STATS</span>`;
 }
 
 function returnInfoNavigation(id) {
