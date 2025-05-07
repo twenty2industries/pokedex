@@ -15,9 +15,9 @@ async function renderPokeCards() {
   try {
     loadingSpinner();
     const spinnerMinDuration = new Promise((resolve) => setTimeout(resolve, 2000));
-    await spinnerMinDuration; // now waiting- neccessary for the spinner!!!
-    await loadAllPokemons(); // after spinner is done - content loaded
-    document.getElementById('pokeNameInput').addEventListener("keyup", filterNames); //keyup is better for this function then keydown - if input.value = 0 you need to delete onemore time if used keydown
+    await spinnerMinDuration;
+    await loadAllPokemons();
+    document.getElementById('pokeNameInput').addEventListener("keyup", filterNames); 
     removeSpinner();
   } catch (error) {
     console.error("error:", error);
@@ -32,14 +32,14 @@ function removeSpinner() {
 async function fetchPokeList() {
   let response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=20&offset=${renderCounter}`);
   const data = await response.json();
-  return data; // return data very important so loadAllpokemons can work with const data.
+  return data;
 }
 
 async function fetchPokeDetails(resultDataIndex) {
-  const data = await fetchPokeList(); // definition of data (fetchpokeList) for this scope
-  let pokeUrl = data.results[resultDataIndex].url; //url used with counter to count through all urls.
-  let pokeData = await fetch(pokeUrl); // get the data from the URL
-  let pokeDetails = await pokeData.json(); // parse the fetched Pokémon data
+  const data = await fetchPokeList();
+  let pokeUrl = data.results[resultDataIndex].url; 
+  let pokeData = await fetch(pokeUrl); 
+  let pokeDetails = await pokeData.json(); 
   showPokeTypeZero(pokeDetails);
   return pokeDetails;
 }
@@ -54,6 +54,8 @@ async function loadAllPokemons() {
     const pokeTypesOnePng = await showPokeTypeOne(pokeDetails);
     const contentRef = document.getElementById("display-area");
     contentRef.innerHTML += returnDisplays(i, pokeDetails, pokeName, pokePng, pokeTypesZero, pokeTypesOnePng);
+    console.log(contentRef);
+    
   }
   renderCounter += 20;
 }
@@ -61,10 +63,10 @@ async function loadAllPokemons() {
 async function showPokeTypeOne(details) {
   const typeInfo = details.types[1]
     ? await (await fetch(details.types[1].type.url)).json()
-    : undefined; // if got value then define else empty string, variable now ready to fetch get
+    : undefined; 
   const typeIcon = typeInfo
     ? typeInfo.sprites["generation-vii"]?.["sun-moon"]?.name_icon
-    : ""; // : '' solved an error :undefined occures to be an error in the dom
+    : "";
   return typeIcon;
 }
 
@@ -80,8 +82,8 @@ async function triggerMorePokemons() {
     toggleMoreButton();
     getLoadMoreIcon();
     const delay = new Promise((resolve) => setTimeout(resolve, 750));
-    await delay; // now waiting 1 second - neccessary for the spinner!!!
-    await loadAllPokemons(); // after spinner is done - content loaded
+    await delay; 
+    await loadAllPokemons();
     removeLoadMoreIcon();
     toggleMoreButton();
   } catch (error) {
@@ -107,7 +109,7 @@ function removeLoadMoreIcon() {
 async function fetchBigOverlayPokeList() {
   let response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=1000&offset=0`);
   const data = await response.json();
-  return data; // return data very important so loadAllpokemons can work with const data.
+  return data;
 }
 
 async function fetchBigOverlayPokeDetails(index) {
@@ -138,7 +140,6 @@ function removeOverflowHidden() {
   bodyRef.classList.remove('hidden_overflow');
 }
 
-
 async function loadNextOrPreviousgBigOverlayPokemons(detail) {
   const condition = detail + 1;
   if (condition !== 0) {
@@ -164,7 +165,7 @@ function renderAbilityNamesOverlay(abilitiesDetails) {
     abilityName += abilitiesDetails.abilities[f].ability.name + "  ";
     returnMainStatsOverlay(abilityName, weight, height);  
   }
-  returnStatsNavigation(abilityName, weight, height);// neccessary to give the argument to onclick="returnMainStatsOverlay('${abilityName}', ${weight}, ${height})"
+  returnStatsNavigation(abilityName, weight, height);
 }
 
 async function renderStatsNamesOverlay(indexBigOverlay) {
@@ -207,7 +208,6 @@ async function filterNames() {
     await loadAllPokemons();
   }
 }
-
 
 async function renderFilteredPokemon(contentRef, allPokemons, pokeIndex, name) {
   const response = await fetch(allPokemons.results[pokeIndex].url); 
