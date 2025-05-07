@@ -26,22 +26,34 @@ header {
   .headerArea {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-evenly;
     background-color: #787a75;
     width: 100%;
     max-width: 1920px;
     height: 14rem;
     padding: 0rem 10rem;
+
+    @media (max-width: 890px) {
+      flex-direction: column;
+    }
   }
 
   .input {
     height: 4rem;
     width: 30rem;
     text-align: center;
+
+    @media (max-width: 380px) {
+      width: 25rem;
+    }
   }
 
   .logo {
     height: 11rem;
+
+    @media (max-width: 890px) {
+      height: 7rem;
+    }
   }
 }
 
@@ -52,6 +64,13 @@ header {
   justify-content: center;
   padding: 3rem 10rem;
 
+  @media (max-width: 1279px) {
+    padding: 3rem 1rem;
+  }
+
+  @media (max-width: 1096px) {
+    padding: 3rem 2rem;
+  }
 
   .displayArea {
     max-width: 1920px;
@@ -68,6 +87,14 @@ header {
     color: white;
     width: 50rem;
     cursor: pointer;
+
+    @media (max-width: 1096px) {
+      width: 80rem;
+    }
+    
+    @media (max-width: 380px) {
+      width: 25rem;
+    }
 
     .pokemonNameArea {
       width: 100%;
@@ -89,6 +116,10 @@ header {
       justify-content: center;
       align-items: center;
       border-bottom-right-radius: 7rem;
+
+      @media (max-width: 380px) {
+        flex-direction: column;
+      }
 
       .pokeTypeInfo {
         height: 5rem;
@@ -175,7 +206,6 @@ header {
       background-repeat: no-repeat;
       border: none;
     }
-
   }
 
   .displayBigArea {
@@ -196,8 +226,20 @@ header {
     height: 44rem;
     border: solid rgb(90, 90, 90);
 
+    @media (max-width: 430px) {
+      height: auto;
+    }
+
     .pokemonImageBig {
-      height: 44rem;
+      height: 40rem;
+
+      @media (max-width: 577px) {
+        height: 40rem;
+      }
+
+      @media (max-width: 430px) {
+        height: 26rem;
+      }
     }
   }
 
@@ -205,6 +247,22 @@ header {
     font-size: 2.4rem;
     color: white;
     width: 71rem;
+      @media (max-width: 690px) {
+      width: 55rem;
+    }
+
+    @media (max-width: 577px) {
+      width: 40rem;
+    }
+
+    @media (max-width: 430px) {
+      width: 32rem;
+    }
+
+    @media (max-width: 340px) {
+      width: 28rem;
+    }
+
 
     .pokemonNameAreaBig {
       width: 100%;
@@ -220,13 +278,19 @@ header {
 
       .elementInfoAreaBig {
         height: 9rem;
-        padding: 2rem 3rem;
         background-color: rgb(90, 90, 90);
         display: flex;
         justify-content: center;
         align-items: center;
           .pokeTypeInfoBig {
             height: 5rem;
+
+         @media (max-width: 577px) {
+              height: 6rem;            
+        }
+          @media (max-width: 577px) {
+            padding: 1rem 1rem;
+          }
       }
     }
   }
@@ -234,10 +298,12 @@ header {
   .statsOverlay {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 3rem;
+    justify-content: space-between;
+    padding: 0rem 2rem;
+    gap: 1rem;
     width: 100%;
     border: solid rgb(90, 90, 90);
+    
 
     .mainStat {
       cursor: pointer;
@@ -277,11 +343,19 @@ header {
     height: 25rem;
     border-bottom-right-radius: 10rem;
 
+    @media (max-width: 577px) {
+      height: 17rem;
+    }
+
     .pokeStatsOverlay {
       display: flex;
       align-items: center;
       padding: 0rem 3rem;
       height: 7rem;
+
+      @media (max-width: 577px) {
+        font-size: 1.6rem;
+      }
     }
   }
 }
