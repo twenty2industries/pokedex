@@ -8,14 +8,6 @@ function loadingSpinner() {
       </div>`;
 }
 
-function returnHeader() {
-  const headerRef = document.getElementById("header-area");
-  headerRef.innerHTML += `       <div class="headerArea">
-      <img src="assets/logo/logo1.png" class="logo" />
-      <input id="pokeNameInput" class="input" type="text" placeholder="search " />
-    </div> `;
-}
-
 function returnDisplays(index, details, name, image, typeZero, typeOneImg) {
   return `<div id="display-${details.id}" onclick="loadAllBigOverlayPokemons(${details.id - 1})" class="displays">
           <div id="pokemon-name-area-${details.id}" class="pokemonNameArea">
@@ -30,8 +22,8 @@ function returnDisplays(index, details, name, image, typeZero, typeOneImg) {
           <img class="pokemonImage" src="${image}">
           </div>
           <div id="element-info-area-${details.id}" class="elementInfoArea">
-            <img class="pokeTypeInfo" src="${typeZero}">
-            <img class="pokeTypeInfo" src="${typeOneImg}">
+            <span class="pokeTypeInfo ${typeZero}"> ${typeZero.toUpperCase()} </span>
+            <span class="pokeTypeInfo ${typeOneImg}"> ${typeOneImg.toUpperCase()} </span>
           </div>
         </div>`;
 }
@@ -51,26 +43,21 @@ function returnBigOverlay(index, name, details, image, typeZero, typeOneImg) {
       <img class="pokemonImageBig" src="${image}">
       </div>
       <div id="element-info-area-0${index}" class="elementInfoAreaBig">
-        <img class="pokeTypeInfoBig" src="${typeZero}">
-        <img class="pokeTypeInfoBig" src="${typeOneImg}">
+            <span class="pokeTypeInfoBig ${typeZero}"> ${typeZero.toUpperCase()} </span>
+            <span class="pokeTypeInfoBig ${typeOneImg}"> ${typeOneImg.toUpperCase()} </span>
       </div>
               <div class="statsOverlay ${
                 details.types[0].type.name
               }" id="stats-overlay">
-                            <button class="loadMoreButtonOverlay" onclick="loadNextOrPreviousgBigOverlayPokemons(${details.id - 2})">-</button>
+                            <button class="loadMoreButtonOverlay" id="previousButton" onclick="loadNextOrPreviousgBigOverlayPokemons(${details.id - 2})">-</button>
                             <button class="loadMoreButtonOverlay" onclick="loadNextOrPreviousgBigOverlayPokemons(${details.id})">+</button>
+                            <button class="loadMoreButtonOverlay" onclick="closeBigOverlayButton()">x</button>
               </div>
               <div class="statsOverlayDetails" id="stats-overlay-details"></div>
               
     </div>
   </div>
 </div>`;
-}
-
-function returnFooter() {
-  const footerRef = document.getElementById("footer-area");
-  footerRef.innerHTML += `<img class="logoFooter" src="assets/logo/logoFooter.png"/>
-`;
 }
 
 function returnStatsNavigation(abilityName, weight, height) {
