@@ -1,12 +1,6 @@
 function init() {
-  renderContent();
   renderPokeCards();
   ShowNames();
-}
-
-function renderContent() {
-  returnHeader();
-  returnFooter();
 }
 
 let renderCounter = 0;
@@ -17,7 +11,6 @@ async function renderPokeCards() {
     const spinnerMinDuration = new Promise((resolve) => setTimeout(resolve, 2000));
     await spinnerMinDuration;
     await loadAllPokemons();
-    document.getElementById('pokeNameInput').addEventListener("keyup", filterNames); 
     removeSpinner();
   } catch (error) {
     console.error("error:", error);
@@ -27,6 +20,7 @@ async function renderPokeCards() {
 function removeSpinner() {
   const spinnerAreaRef = document.getElementById("loading-spinner-area");
   spinnerAreaRef.innerHTML = "";
+  spinnerAreaRef.classList.add('d_none');
 }
 
 async function fetchPokeList() {
@@ -35,46 +29,29 @@ async function fetchPokeList() {
   return data;
 }
 
-async function fetchPokeDetails(resultDataIndex) {
-  const data = await fetchPokeList();
-  let pokeUrl = data.results[resultDataIndex].url; 
-  let pokeData = await fetch(pokeUrl); 
-  let pokeDetails = await pokeData.json(); 
-  showPokeTypeZero(pokeDetails);
-  return pokeDetails;
-}
+let loadedPokemons = {};
 
 async function loadAllPokemons() {
   const data = await fetchPokeList();
+  const contentRef = document.getElementById("display-area");
   for (let i = 0; i < data.results.length; i++) {
     const pokeName = data.results[i].name;
-    const pokeDetails = await fetchPokeDetails(i);
-    const pokePng = pokeDetails.sprites.front_default;
-    const pokeTypesZero = await showPokeTypeZero(pokeDetails);
-    const pokeTypesOnePng = await showPokeTypeOne(pokeDetails);
-    const contentRef = document.getElementById("display-area");
-    contentRef.innerHTML += returnDisplays(i, pokeDetails, pokeName, pokePng, pokeTypesZero, pokeTypesOnePng);
-    console.log(contentRef);
-    
+    const pokeUrl = data.results[i].url;
+    if (!document.getElementById(pokeName)) {
+      await pokeResponse(pokeUrl, pokeName, contentRef, i);
+    }
   }
   renderCounter += 20;
 }
 
-async function showPokeTypeOne(details) {
-  const typeInfo = details.types[1]
-    ? await (await fetch(details.types[1].type.url)).json()
-    : undefined; 
-  const typeIcon = typeInfo
-    ? typeInfo.sprites["generation-vii"]?.["sun-moon"]?.name_icon
-    : "";
-  return typeIcon;
-}
-
-async function showPokeTypeZero(details) {
-  let pokeTypeZeroUrl = details.types[0].type.url;
-  let pokeTypeZeroUrlData = await fetch(pokeTypeZeroUrl);
-  let pokeTypeZeroPng = await pokeTypeZeroUrlData.json();
-  return pokeTypeZeroPng.sprites["generation-vii"]["sun-moon"].name_icon;
+async function pokeResponse(pokeUrl, pokeName, contentRef, i) {
+  const pokeResponse = await fetch(pokeUrl);
+  const pokeDetails = await pokeResponse.json();
+  const pokePng = pokeDetails.sprites.front_default;
+  const pokeTypesZero = pokeDetails.types[0]?.type.name || '';
+  const pokeTypesOnePng = pokeDetails.types[1]?.type.name || '';
+  const pokeCardHTML = returnDisplays(i, pokeDetails, pokeName, pokePng, pokeTypesZero, pokeTypesOnePng);
+  contentRef.innerHTML += pokeCardHTML;
 }
 
 async function triggerMorePokemons() {
@@ -94,6 +71,11 @@ async function triggerMorePokemons() {
 function toggleMoreButton() {
   const buttonRef = document.getElementById("load-more-button");
   buttonRef.classList.toggle("d_none");
+}
+
+function removeMoreButton() {
+  const buttonRef = document.getElementById("load-more-button");
+  buttonRef.classList.add("d_none");
 }
 
 function getLoadMoreIcon() {
@@ -118,12 +100,12 @@ async function fetchBigOverlayPokeDetails(index) {
 }
 
 async function loadAllBigOverlayPokemons(indexBigOverlay) {
-  const data = await fetchBigOverlayPokeDetails(indexBigOverlay);
-  const pokeDetails = data;
-  const pokeTypesZero = await showPokeTypeZero(pokeDetails);
-  const pokeTypesOnePng = await showPokeTypeOne(pokeDetails);
+  const pokeDetails = await fetchBigOverlayPokeDetails(indexBigOverlay);
+  const pokeTypesZero = pokeDetails.types[0]?.type.name || '';
+  const pokeTypesOnePng = pokeDetails.types[1]?.type.name || '';
   const contentRef = document.getElementById("big-overlay");
-  contentRef.innerHTML = returnBigOverlay(pokeDetails.id, data.name, pokeDetails, pokeDetails.sprites.front_default, pokeTypesZero, pokeTypesOnePng);
+  contentRef.innerHTML = returnBigOverlay(pokeDetails.id, pokeDetails.name, pokeDetails, pokeDetails.sprites.front_default, pokeTypesZero, pokeTypesOnePng);
+  document.getElementById('previousButton').classList.toggle('d_none', indexBigOverlay === 0);
   renderAbilityNamesOverlay(pokeDetails);
   returnStatStatsNavigation(indexBigOverlay);
   returnInfoNavigation(pokeDetails.id);
@@ -142,9 +124,9 @@ function removeOverflowHidden() {
 
 async function loadNextOrPreviousgBigOverlayPokemons(detail) {
   const condition = detail + 1;
-  if (condition !== 0) {
+  if (condition > 0) {
     loadAllBigOverlayPokemons(detail);
-  }
+  }   
 }
 
 function closeBigOverlay(event) {
@@ -153,6 +135,12 @@ function closeBigOverlay(event) {
     openOverlayRef.innerHTML = "";
     removeOverflowHidden();
   }
+}
+
+function closeBigOverlayButton() {
+    const openOverlayRef = document.getElementById("big-overlay");
+    openOverlayRef.innerHTML = "";
+    removeOverflowHidden();
 }
 
 document.getElementById('content-area').addEventListener("click", closeBigOverlay);
@@ -198,38 +186,36 @@ async function ShowNames(){
 }
 
 async function filterNames() {
-  const inputRef = document.getElementById('pokeNameInput').value;
+  removeMoreButton();
+  const inputRef = document.getElementById('pokeNameInput').value.toLowerCase();
   const contentRef = document.getElementById("display-area");
-  contentRef.innerHTML = "";
+  const errorRef = document.getElementById("error-field");
+  if (inputRef.length <= 2) {
+    errorRef.innerHTML = `<div class="noResults">Bitte mindestens 3 Buchstaben für die Suche eingeben!</div>`;
+  }
   if (inputRef.length >= 3) {
     filterAndRenderMatchingPokemons(inputRef, contentRef);
-  } else if (inputRef.length === 0) {
-    resetFilteredView();
-    await loadAllPokemons();
   }
 }
 
 async function renderFilteredPokemon(contentRef, allPokemons, pokeIndex, name) {
   const response = await fetch(allPokemons.results[pokeIndex].url); 
   const pokeDetails = await response.json();
-  const pokeTypesZero = await showPokeTypeZero(pokeDetails);
-  const pokeTypesOnePng = await showPokeTypeOne(pokeDetails);
+  const pokeTypesZero = pokeDetails.types[0]?.type.name || '';
+  const pokeTypesOnePng = pokeDetails.types[1]?.type.name || '';
   contentRef.innerHTML += returnDisplays(pokeIndex + 1, pokeDetails, name, pokeDetails.sprites.front_default, pokeTypesZero, pokeTypesOnePng);
 }
 
-function resetFilteredView() {
-  const contentRef = document.getElementById("display-area");
-  contentRef.innerHTML = "";
-  renderCounter = 0;
-}
-
 async function filterAndRenderMatchingPokemons(searchInputValue, contentRef) {
-    const filteredNames = toFilteredNames.filter(name => name.includes(searchInputValue));
-    const allPokemons = await fetchBigOverlayPokeList();
-    for (const name of filteredNames) {
-      const pokeIndex = allPokemons.results.findIndex(p => p.name === name);
-      if (pokeIndex !== -1) {
-        renderFilteredPokemon(contentRef, allPokemons, pokeIndex, name);
-      }
-    }
-  } 
+  const errorRef = document.getElementById("error-field");
+  const filteredNames = toFilteredNames.filter(name => name.includes(searchInputValue));
+  if (filteredNames.length === 0) {
+    errorRef.innerHTML = `<div class="noResults">Keine Treffer gefunden</div>`;}
+  const allPokemons = await fetchBigOverlayPokeList();
+  for (const name of filteredNames) {
+    const pokeIndex = allPokemons.results.findIndex(p => p.name === name);
+    if (pokeIndex !== -1) {
+      errorRef.innerHTML = "";
+      contentRef.innerHTML = "";
+      renderFilteredPokemon(contentRef, allPokemons, pokeIndex, name);}}
+}
